@@ -1,0 +1,18 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "supabase": "^1.93.0"
+  },
+  "scripts": {
+    "start": "supabase start",
+    "stop": "supabase stop",
+    "link": "supabase link",
+    "db:reset": "supabase db reset",
+    "db:push": "supabase db push",
+    "functions": "supabase functions serve",
+    "types": "supabase gen types typescript --local > ../web/src/api/types.ts"
+  }
+}
