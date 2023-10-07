@@ -4,8 +4,8 @@ import Table from "../../commons/Table";
 import { useTable } from "../../../hooks/useTable";
 import { useQuery } from "@tanstack/react-query";
 import { QueryKey } from "../../../utils/constants";
-import { Job, getJobs } from "../../../api/job";
-import { ActionsCell } from "./Cells";
+import { Overtime, getOvertime } from "../../../api/overtime";
+import { DateCell } from "./Cells";
 
 const Container = styled.div`
   display: flex;
@@ -14,39 +14,35 @@ const Container = styled.div`
 `;
 
 type Props = {
-  companyId?: string;
-  departmentId?: string;
+  employeeId?: string;
 };
 
-export default function JobsTable({ companyId, departmentId }: Props) {
+export default function OvertimeTable({ employeeId }: Props) {
   const { data } = useQuery({
-    queryKey: [QueryKey.Jobs, { where: { companyId, departmentId } }],
-    queryFn: () => getJobs({ where: { companyId, departmentId } }),
+    queryKey: [QueryKey.Overtime, { where: { employeeId } }],
+    queryFn: () => getOvertime({ where: { employeeId } }),
   });
 
   const columns = useMemo(
     () => [
       {
-        accessorKey: "department.name",
-        header: "Departamento",
+        accessorKey: "type",
+        header: "Tipo de hora extra",
       },
       {
-        accessorKey: "title",
-        header: "Puesto",
+        accessorKey: "date",
+        header: "Fecha",
+        cell: DateCell,
       },
       {
-        accessorKey: "description",
-        header: "Descripción",
-      },
-      {
-        header: "Acciones",
-        cell: ActionsCell,
+        accessorKey: "quantity",
+        header: "Cantidad",
       },
     ],
     []
   );
 
-  const table = useTable<Job>({
+  const table = useTable<Overtime>({
     columns,
     data: data ?? [],
     manualPagination: true,

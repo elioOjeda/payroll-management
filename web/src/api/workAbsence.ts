@@ -13,6 +13,7 @@ export type WorkAbsence =
 type GetWorkAbsencesParams = {
   where: {
     companyId?: string;
+    employeeId?: string;
   };
 };
 
@@ -34,6 +35,10 @@ export async function getWorkAbsences({
 
   if (where.companyId) {
     query.eq("company_id", where.companyId);
+  }
+
+  if (where.employeeId) {
+    query.eq("employee_id", where.employeeId);
   }
 
   const { data, error } = await query;

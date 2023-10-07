@@ -1,12 +1,11 @@
 import { Title } from "@mantine/core";
 import styled from "styled-components";
-import Button from "../components/commons/Button";
-import { FaCalendar, FaCirclePlus } from "react-icons/fa6";
+import { FaCalendar } from "react-icons/fa6";
 import { MonthPickerInput } from "@mantine/dates";
 import { useState } from "react";
-import { showCustomNotification } from "../utils/functions/showCustomNotification";
-import { lastDayOfMonth } from "date-fns";
-import { formatDateToUTC } from "../utils/functions/formatDateToUTC";
+import PayrollTable from "../components/Payroll/PayrollTable";
+import useAppContext from "../hooks/useAppContext";
+import CompanySelect from "../components/CompanySelect";
 
 const Container = styled.div`
   display: flex;
@@ -16,24 +15,8 @@ const Container = styled.div`
 
 export default function PayrollsPage() {
   const [value, setValue] = useState<Date | null>(null);
-
-  const handleClick = () => {
-    if (!value) {
-      return showCustomNotification("warning", {
-        title: "Seleccione un mes antes de continuar...",
-      });
-    }
-
-    showCustomNotification("success", { title: "Generando nomina mensual..." });
-    showCustomNotification("success", {
-      title: "Primer dia",
-      message: formatDateToUTC(value),
-    });
-    showCustomNotification("success", {
-      title: "Ultimo dia",
-      message: formatDateToUTC(lastDayOfMonth(value)),
-    });
-  };
+  const [companyId, setCompanyId] = useState<string>();
+  const { isSuperAdmin } = useAppContext();
 
   return (
     <Container>
@@ -51,17 +34,24 @@ export default function PayrollsPage() {
           style={{ width: "250px" }}
         />
 
-        <Button
-          color="blue"
-          leftIcon={<FaCirclePlus />}
-          onClick={handleClick}
-          style={{ width: "250px" }}
-        >
-          Generar nómina mensual
-        </Button>
+        {isSuperAdmin && (
+          <CompanySelect
+            clearable={false}
+            label="Empresa"
+            onChange={setCompanyId}
+            placeholder="Seleccione una empresa"
+            required
+            value={companyId}
+          />
+        )}
       </div>
 
-      <h1>Tabla con resultados</h1>
+      {value && (
+        <PayrollTable
+          companyId={isSuperAdmin ? companyId : undefined}
+          month={value}
+        />
+      )}
     </Container>
   );
 }

@@ -1,9 +1,11 @@
 import { Database } from "./types";
 import supabase from "./supabase";
 import { Company } from "./company";
+import { Deparment } from "./department";
 
 export type Job = Database["public"]["Tables"]["job"]["Row"] & {
   company: Company;
+  department: Deparment;
 };
 
 type GetJobsParams = {
@@ -19,7 +21,8 @@ export async function getJobs({ where }: GetJobsParams): Promise<Job[]> {
     .select(
       `
       *,
-      company (*)
+      company (*),
+      department (*)
     `,
       { count: "exact" }
     )
@@ -84,7 +87,7 @@ type UpdateParams = {
   jobId: string;
   departmentId?: string;
   title?: string;
-  description?: string;
+  description?: string | null;
   isDisabled?: boolean;
 };
 

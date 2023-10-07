@@ -7,6 +7,7 @@ import { showCustomNotification } from "../../../../utils/functions/showCustomNo
 import { queryClient } from "../../../../api/supabase";
 import { QueryKey } from "../../../../utils/constants";
 import useAppContext from "../../../../hooks/useAppContext";
+import { isBefore } from "date-fns";
 
 const Container = styled.div`
   display: flex;
@@ -48,7 +49,9 @@ export const ApprovedCell = ({ row }: CellContext<WorkAbsence, unknown>) => {
     });
   };
 
-  const isDisabled = !isSuperAdmin && !isAdmin;
+  const isDisabled =
+    (!isSuperAdmin && !isAdmin) ||
+    isBefore(new Date(row.original.absence_date), new Date());
 
   return (
     <Container>

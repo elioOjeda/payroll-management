@@ -6,9 +6,13 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import React, { Dispatch } from "react";
-import { FaFileInvoiceDollar, FaPowerOff } from "react-icons/fa6";
+import { FaPeopleRoof, FaPowerOff } from "react-icons/fa6";
 import Button from "../commons/Button";
 import { signOut } from "../../api/auth";
+import { useQuery } from "@tanstack/react-query";
+import { QueryKey } from "../../utils/constants";
+import useAppContext from "../../hooks/useAppContext";
+import { getCompany } from "../../api/company";
 
 type Props = {
   opened: boolean;
@@ -17,6 +21,16 @@ type Props = {
 
 export default function Header({ opened, setOpened }: Props) {
   const theme = useMantineTheme();
+  const { isSuperAdmin, user } = useAppContext();
+
+  const { data } = useQuery({
+    queryKey: [
+      QueryKey.Company,
+      { where: { companyId: user?.user_metadata?.company_id } },
+    ],
+    queryFn: () =>
+      getCompany({ where: { companyId: user?.user_metadata?.company_id } }),
+  });
 
   const handleClick = async () => await signOut();
 
@@ -41,10 +55,12 @@ export default function Header({ opened, setOpened }: Props) {
           />
         </MediaQuery>
 
-        <div style={{ display: "flex", gap: "8px" }}>
-          <FaFileInvoiceDollar size={24} />
+        <div style={{ alignItems: "center", display: "flex", gap: "16px" }}>
+          <FaPeopleRoof size={48} />
 
-          <Title order={4}>Gestión de Nóminas</Title>
+          <Title order={4}>
+            {isSuperAdmin ? "Gestión de Nóminas" : data?.name}
+          </Title>
         </div>
       </div>
 

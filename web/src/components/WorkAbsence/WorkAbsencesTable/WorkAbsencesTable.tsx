@@ -15,12 +15,13 @@ const Container = styled.div`
 
 type Props = {
   companyId?: string;
+  employeeId?: string;
 };
 
-export default function WorkAbsencesTable({ companyId }: Props) {
+export default function WorkAbsencesTable({ companyId, employeeId }: Props) {
   const { data } = useQuery({
-    queryKey: [QueryKey.WorkAbsences, { where: { companyId } }],
-    queryFn: () => getWorkAbsences({ where: { companyId } }),
+    queryKey: [QueryKey.WorkAbsences, { where: { companyId, employeeId } }],
+    queryFn: () => getWorkAbsences({ where: { companyId, employeeId } }),
   });
 
   const columns = useMemo(

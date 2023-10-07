@@ -27,11 +27,11 @@ const StyledForm = styled.form`
 
 export default function UpdateJob({ job, opened, close }: Props) {
   const initialValues = {
-    title: "",
-    description: "",
+    title: job.title,
+    description: job.description,
   };
 
-  const [departmentId, setDepartmentId] = useState<string>();
+  const [departmentId, setDepartmentId] = useState<string>(job.department_id);
   const [values, setValues] = useState(initialValues);
 
   const setInitialValues = () => {
@@ -102,7 +102,7 @@ export default function UpdateJob({ job, opened, close }: Props) {
           name="description"
           onChange={handleChange}
           placeholder="Descripción"
-          value={values.description}
+          value={values.description ?? ""}
         />
 
         <DeparmentSelect

@@ -1,10 +1,10 @@
 import { Navbar as UINavbar } from "@mantine/core";
 import {
-  FaArrowTrendUp,
+  FaMoneyBillTrendUp,
   FaMoneyCheckDollar,
   FaNetworkWired,
   FaPeopleGroup,
-  FaPersonWalkingArrowRight,
+  FaPersonWalkingLuggage,
 } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -37,11 +37,11 @@ export default function Navbar({ opened }: Props) {
       </StyledLink>
 
       <StyledLink to="/raises">
-        <FaArrowTrendUp size={24} /> Aumentos
+        <FaMoneyBillTrendUp size={24} /> Aumentos
       </StyledLink>
 
       <StyledLink to="/work-absences">
-        <FaPersonWalkingArrowRight size={24} /> Ausencias laborales
+        <FaPersonWalkingLuggage size={24} /> Ausencias laborales
       </StyledLink>
 
       <StyledLink to="/payrolls">

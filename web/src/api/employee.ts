@@ -4,10 +4,18 @@ import { Company } from "./company";
 import { formatDateToUTC } from "../utils/functions/formatDateToUTC";
 import { EmployeeJob } from "./employeeJob";
 import { WorkAbsence } from "./workAbsence";
+import { Job } from "./job";
+import { Deparment } from "./department";
 
 export type Employee = Database["public"]["Tables"]["employee"]["Row"] & {
   company: Company;
-  employee_job: EmployeeJob;
+  employee_job: Array<
+    EmployeeJob & {
+      job: Job & {
+        department: Deparment;
+      };
+    }
+  >;
   work_absences: WorkAbsence;
 };
 
@@ -64,7 +72,13 @@ export async function getEmployee({
       `
         *,
         company (*),
-        employee_job (*),
+        employee_job (
+          *,
+          job (
+            *,
+            department (*)
+          )
+        ),
         work_absences (*)
       `,
       { count: "exact" }
