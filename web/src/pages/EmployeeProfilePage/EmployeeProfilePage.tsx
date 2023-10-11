@@ -3,11 +3,12 @@ import { useParams } from "react-router-dom";
 import { QueryKey } from "../../utils/constants";
 import { getEmployee } from "../../api/employee";
 import styled from "styled-components";
-import { Title } from "@mantine/core";
+import { ActionIcon, Image, Title } from "@mantine/core";
 import Button from "../../components/commons/Button";
 import {
   FaClock,
   FaMoneyBillTrendUp,
+  FaPencil,
   FaPersonWalkingLuggage,
 } from "react-icons/fa6";
 import CreateWorkAbsence from "../../components/WorkAbsence/CreateWorkAbsence";
@@ -15,11 +16,18 @@ import { useDisclosure } from "@mantine/hooks";
 import Badge from "../../components/commons/Badge";
 import { JobInfo, OvertimeAndAbsences, PersonalInfo } from "./Sections";
 import CreateOvertime from "../../components/Overtime/CreateOvertime";
+import UpdateEmployee from "../../components/Employee/UpdateEmployee";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
+`;
+
+const UpdateEmployeeContainer = styled.div`
+  align-items: center;
+  display: flex;
+  gap: 16px;
 `;
 
 const ButtonsContainer = styled.div`
@@ -35,6 +43,10 @@ const BadgeContainer = styled.div`
 export default function EmployeeProfilePage() {
   const { employeeId } = useParams();
   const [
+    openedUpdateEmployee,
+    { open: openUpdateEmployee, close: closeUpdateEmployee },
+  ] = useDisclosure(false);
+  const [
     openedWorkAbsence,
     { open: openWorkAbsence, close: closeWorkAbsence },
   ] = useDisclosure(false);
@@ -48,9 +60,29 @@ export default function EmployeeProfilePage() {
 
   return (
     <Container>
-      <Title>
-        {data?.first_name} {data?.last_name}
-      </Title>
+      {data?.photo_url && (
+        <Image radius="xl" height={250} width={250} src={data.photo_url} />
+      )}
+
+      <UpdateEmployeeContainer>
+        <Title>
+          {data?.first_name} {data?.last_name}
+        </Title>
+
+        {data && (
+          <div>
+            <ActionIcon color="blue" onClick={openUpdateEmployee} size="lg">
+              <FaPencil />
+            </ActionIcon>
+
+            <UpdateEmployee
+              employee={data}
+              opened={openedUpdateEmployee}
+              close={closeUpdateEmployee}
+            />
+          </div>
+        )}
+      </UpdateEmployeeContainer>
 
       <BadgeContainer>
         <Badge color="blue" size="xl">

@@ -1,6 +1,5 @@
 import { Navbar as UINavbar } from "@mantine/core";
 import {
-  FaMoneyBillTrendUp,
   FaMoneyCheckDollar,
   FaNetworkWired,
   FaPeopleGroup,
@@ -34,10 +33,6 @@ export default function Navbar({ opened }: Props) {
 
       <StyledLink to="/job-positions">
         <FaNetworkWired size={24} /> Puestos laborales
-      </StyledLink>
-
-      <StyledLink to="/raises">
-        <FaMoneyBillTrendUp size={24} /> Aumentos
       </StyledLink>
 
       <StyledLink to="/work-absences">

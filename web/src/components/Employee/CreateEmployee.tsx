@@ -5,7 +5,7 @@ import { Divider, Title } from "@mantine/core";
 import CompanySelect from "../CompanySelect";
 import useAppContext from "../../hooks/useAppContext";
 import { confirmationModal } from "../../utils/functions/confirmationModal";
-import { createEmployee } from "../../api/employee";
+import { createEmployee, updateEmployee } from "../../api/employee";
 import { QueryKey } from "../../utils/constants";
 import { showCustomNotification } from "../../utils/functions/showCustomNotification";
 import { queryClient } from "../../api/supabase";
@@ -16,6 +16,9 @@ import { FaCirclePlus } from "react-icons/fa6";
 import JobSelect from "../JobSelect";
 import DeparmentSelect from "../DeparmentSelect";
 import { createEmployeeJob } from "../../api/employeeJob";
+import FileInput from "../commons/FileInput";
+import { uploadFile } from "../../api/storage/uploadFile";
+import { getPublicUrl } from "../../api/storage/getPublicUrl";
 
 type Props = {
   opened: boolean;
@@ -43,6 +46,7 @@ export default function CreateEmployee({ opened, close }: Props) {
   const [companyId, setCompanyId] = useState<string>();
   const [birthDate, setBirthDate] = useState<Date>();
   const [hireDate, setHireDate] = useState<Date>();
+  const [image, setImage] = useState<File | null>(null);
   const [values, setValues] = useState(initialValues);
 
   const [departmentId, setDepartmentId] = useState<string>();
@@ -57,6 +61,7 @@ export default function CreateEmployee({ opened, close }: Props) {
     setHireDate(undefined);
     setDepartmentId(undefined);
     setJobId(undefined);
+    setImage(null);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -81,6 +86,13 @@ export default function CreateEmployee({ opened, close }: Props) {
 
     if (!hireDate || !jobId) return;
 
+    if (!image) {
+      return showCustomNotification("warning", {
+        title: "Fotografía",
+        message: "Sube la fotografía del empleado.",
+      });
+    }
+
     const isConfirmed = await confirmationModal({
       title: "Crear",
       message: "¿Estás seguro de que deseas crear este empleado?",
@@ -99,6 +111,23 @@ export default function CreateEmployee({ opened, close }: Props) {
       phone,
       email,
       hireDate,
+    });
+
+    const requestFilePath = await uploadFile({
+      id: employeeId,
+      bucketName: "employee-files",
+      folder: "images",
+      file: image,
+    });
+
+    const photoUrl = getPublicUrl({
+      bucketName: "employee-files",
+      filePath: requestFilePath,
+    });
+
+    await updateEmployee({
+      employeeId,
+      photoUrl,
     });
 
     await createEmployeeJob({
@@ -143,6 +172,16 @@ export default function CreateEmployee({ opened, close }: Props) {
           my="xs"
           label="Información del empleado"
           labelPosition="center"
+        />
+
+        <FileInput
+          accept="image/png,image/jpeg,image/jpg"
+          label="Fotografía"
+          name="imageUrl"
+          onChange={setImage}
+          placeholder="Subir archivo"
+          required
+          value={image}
         />
 
         <Input

@@ -11,6 +11,11 @@ import useAppContext from "../../../hooks/useAppContext";
 import { QueryKey } from "../../../utils/constants";
 import Button from "../../commons/Button";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
+import { confirmationModal } from "../../../utils/functions/confirmationModal";
+import { showCustomNotification } from "../../../utils/functions/showCustomNotification";
+import { createPayroll } from "../../../api/payroll";
+import { queryClient } from "../../../api/supabase";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -18,19 +23,31 @@ const Container = styled.div`
   gap: 24px;
 `;
 
-type Props = {
-  companyId?: string;
-  month: Date;
+export type PayrollData = {
+  full_name: string;
+  base_salary: number;
+  days_worked: number;
+  absences: number;
+  absences_discount: number;
+  igss_discount: number;
+  simple_overtime_count: number;
+  simple_overtime_total: number;
+  double_overtime_count: number;
+  double_overtime_total: number;
+  total_liquid: number;
 };
 
-export default function PayrollTable({ companyId, month }: Props) {
-  const { isSuperAdmin, user } = useAppContext();
-  const showPayrollClosure = true;
+type Props = {
+  companyId?: string;
+  payrollDate: Date;
+};
 
-  const getPayroll = (month: Date) => {
-    // Se hace una busqueda en la base de datos en la tabla nominas y si ya existe una nomina con
-    // ese mes y año, entonces se debera mostrar un error que indique que ya se genero esa nomina.
-  };
+export default function GeneratePayrollTable({
+  companyId,
+  payrollDate,
+}: Props) {
+  const { isSuperAdmin, user } = useAppContext();
+  const navigate = useNavigate();
 
   const { data } = useQuery({
     queryKey: [
@@ -38,7 +55,7 @@ export default function PayrollTable({ companyId, month }: Props) {
       {
         where: {
           companyId: isSuperAdmin ? companyId : user?.user_metadata?.company_id,
-          month,
+          payrollDate,
         },
       },
     ],
@@ -46,7 +63,7 @@ export default function PayrollTable({ companyId, month }: Props) {
       calculateMonthlyPayroll({
         where: {
           companyId: isSuperAdmin ? companyId : user?.user_metadata?.company_id,
-          month,
+          payrollDate,
         },
       }),
   });
@@ -107,18 +124,51 @@ export default function PayrollTable({ companyId, month }: Props) {
     manualPagination: true,
   });
 
+  const currentCompanyId = user?.user_metadata?.company_id;
+
+  const handleClick = async () => {
+    if (isSuperAdmin && !companyId) {
+      return showCustomNotification("warning", {
+        title: "Cierre nómina",
+        message: "Por favor selecciona una empresa.",
+      });
+    }
+
+    if (!data) return;
+
+    const isConfirmed = await confirmationModal({
+      title: "Cierre nómina",
+      message: "¿Estás seguro de que deseas efectuar el cierre de esta nómina?",
+    });
+
+    if (!isConfirmed) return;
+
+    await createPayroll<PayrollData>({
+      companyId: isSuperAdmin ? companyId : currentCompanyId,
+      payrollDate,
+      payrollData: data,
+    });
+
+    queryClient.invalidateQueries({ queryKey: [QueryKey.Payrolls] });
+
+    navigate("/payrolls");
+
+    showCustomNotification("success", {
+      title: "Cierre nómina",
+      message: "Cierre de nómina efectuado correctamente.",
+    });
+  };
+
   return (
     <Container>
-      {!showPayrollClosure && (
-        <Button
-          color="blue"
-          leftIcon={<FaMoneyCheckDollar />}
-          onClick={() => undefined}
-          style={{ width: 250 }}
-        >
-          Cierre nómina
-        </Button>
-      )}
+      <Button
+        color="blue"
+        leftIcon={<FaMoneyCheckDollar />}
+        onClick={handleClick}
+        style={{ width: 250 }}
+      >
+        Cierre nómina
+      </Button>
 
       <Table table={table} />
     </Container>

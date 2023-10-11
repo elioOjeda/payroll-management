@@ -606,6 +606,76 @@ export interface Database {
           }
         ]
       }
+      payroll: {
+        Row: {
+          company_id: string
+          created_at: string | null
+          created_by: string | null
+          disabled_at: string | null
+          disabled_by: string | null
+          id: string
+          is_closed: boolean
+          is_disabled: boolean
+          payroll_data: Json
+          payroll_date: string
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string | null
+          created_by?: string | null
+          disabled_at?: string | null
+          disabled_by?: string | null
+          id?: string
+          is_closed?: boolean
+          is_disabled?: boolean
+          payroll_data: Json
+          payroll_date: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string | null
+          created_by?: string | null
+          disabled_at?: string | null
+          disabled_by?: string | null
+          id?: string
+          is_closed?: boolean
+          is_disabled?: boolean
+          payroll_data?: Json
+          payroll_date?: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_company_id_fkey"
+            columns: ["company_id"]
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payroll_created_by_fkey"
+            columns: ["created_by"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payroll_disabled_by_fkey"
+            columns: ["disabled_by"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payroll_updated_by_fkey"
+            columns: ["updated_by"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       raise: {
         Row: {
           company_id: string

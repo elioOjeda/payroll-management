@@ -1,11 +1,16 @@
-import { Title } from "@mantine/core";
+import { Card, Grid, Text, Title } from "@mantine/core";
 import styled from "styled-components";
-import { FaCalendar } from "react-icons/fa6";
-import { MonthPickerInput } from "@mantine/dates";
-import { useState } from "react";
-import PayrollTable from "../components/Payroll/PayrollTable";
+import { FaMoneyCheckDollar } from "react-icons/fa6";
+import Button from "../components/commons/Button";
+import { Link } from "react-router-dom";
+import { QueryKey } from "../utils/constants";
+import { useQuery } from "@tanstack/react-query";
+import { getPayrolls } from "../api/payroll";
 import useAppContext from "../hooks/useAppContext";
+import { useState } from "react";
 import CompanySelect from "../components/CompanySelect";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 const Container = styled.div`
   display: flex;
@@ -13,26 +18,63 @@ const Container = styled.div`
   gap: 24px;
 `;
 
+const InnerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const StyledLink = styled(Link)`
+  alignitems: center;
+  display: flex;
+  gap: 8px;
+  text-decoration: none;
+`;
+
+const StyledCard = styled(Card)`
+  &:hover {
+    transform: translateY(-15px);
+    transition: transform 0.4s ease;
+    opacity: 0.5;
+  }
+`;
+
 export default function PayrollsPage() {
-  const [value, setValue] = useState<Date | null>(null);
+  const { isSuperAdmin, user } = useAppContext();
   const [companyId, setCompanyId] = useState<string>();
-  const { isSuperAdmin } = useAppContext();
+
+  const { data } = useQuery({
+    queryKey: [
+      QueryKey.Payrolls,
+      {
+        where: {
+          companyId: isSuperAdmin ? companyId : user?.user_metadata?.company_id,
+        },
+      },
+    ],
+    queryFn: () =>
+      getPayrolls({
+        where: {
+          companyId: isSuperAdmin ? companyId : user?.user_metadata?.company_id,
+        },
+      }),
+  });
 
   return (
     <Container>
-      <Title>Nóminas</Title>
+      <InnerContainer>
+        <Title>Nóminas</Title>
 
-      <div style={{ alignItems: "flex-end", display: "flex", gap: 16 }}>
-        <MonthPickerInput
-          clearable
-          dropdownType="modal"
-          rightSection={<FaCalendar />}
-          label="Selecciona un mes"
-          placeholder="Selecciona un mes"
-          value={value}
-          onChange={setValue}
-          style={{ width: "250px" }}
-        />
+        <StyledLink to="/generate-payroll">
+          <Button
+            color="blue"
+            leftIcon={<FaMoneyCheckDollar />}
+            onClick={() => undefined}
+            variant="subtle"
+          >
+            Generar nómina
+          </Button>
+        </StyledLink>
 
         {isSuperAdmin && (
           <CompanySelect
@@ -42,16 +84,44 @@ export default function PayrollsPage() {
             placeholder="Seleccione una empresa"
             required
             value={companyId}
+            style={{ width: 250 }}
           />
         )}
-      </div>
+      </InnerContainer>
 
-      {value && (
-        <PayrollTable
-          companyId={isSuperAdmin ? companyId : undefined}
-          month={value}
-        />
-      )}
+      <Grid gutter="xl">
+        {data &&
+          data.map((x) => (
+            <Grid.Col key={x.id} span={4}>
+              <StyledLink to={`/payrolls/${x.id}`}>
+                <StyledCard
+                  shadow="xl"
+                  padding="lg"
+                  radius="md"
+                  w="100%"
+                  withBorder
+                >
+                  <FaMoneyCheckDollar size={64} />
+                  <Text
+                    fw="bold"
+                    size="xl"
+                    variant="gradient"
+                    gradient={{ from: "indigo", to: "red", deg: 200 }}
+                  >
+                    {format(
+                      new Date(x.payroll_date.replace(/-/g, "/")),
+                      "MMMM, yyyy",
+                      {
+                        locale: es,
+                        weekStartsOn: 1,
+                      }
+                    ).toUpperCase()}
+                  </Text>
+                </StyledCard>
+              </StyledLink>
+            </Grid.Col>
+          ))}
+      </Grid>
     </Container>
   );
 }

@@ -1,3 +1,18 @@
+CREATE TABLE payroll (
+  id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+  company_id UUID REFERENCES company(id) NOT NULL,
+	payroll_date DATE NOT NULL,
+	payroll_data JSONB NOT NULL,
+  is_closed BOOLEAN NOT NULL DEFAULT TRUE,
+  is_disabled BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT (NOW() AT TIME ZONE 'utc'),
+  created_by UUID REFERENCES auth.users(id),
+  updated_at TIMESTAMPTZ,
+  updated_by UUID REFERENCES auth.users(id),
+  disabled_at TIMESTAMPTZ,
+  disabled_by UUID REFERENCES auth.users(id)
+);
+
 -- Dias no laborados
 CREATE OR REPLACE FUNCTION monthly_unpaid_absence_count(
   p_employee_id UUID,

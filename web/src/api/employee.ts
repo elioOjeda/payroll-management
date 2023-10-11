@@ -156,6 +156,7 @@ type UpdateParams = {
   phone?: string | null;
   email?: string | null;
   hireDate?: Date;
+  photoUrl?: string;
   isDisabled?: boolean;
 };
 
@@ -168,6 +169,7 @@ export async function updateEmployee({
   phone,
   email,
   hireDate,
+  photoUrl,
   isDisabled,
 }: UpdateParams): Promise<Employee> {
   if (!employeeId) {
@@ -184,6 +186,7 @@ export async function updateEmployee({
       phone,
       email,
       hire_date: hireDate ? formatDateToUTC(hireDate) : hireDate,
+      photo_url: photoUrl,
       is_disabled: isDisabled,
     })
     .eq("id", employeeId)

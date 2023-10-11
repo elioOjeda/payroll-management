@@ -82,6 +82,7 @@ export default function CreateWorkAbsence({ opened, close }: Props) {
     const requestFilePath = await uploadFile({
       id: employeeId,
       bucketName: "employee-files",
+      folder: "documents",
       file: requestFile,
     });
 
@@ -163,6 +164,7 @@ export default function CreateWorkAbsence({ opened, close }: Props) {
         />
 
         <FileInput
+          accept=".pdf"
           label="Solicitud"
           name="requestFile"
           onChange={setRequestFile}

@@ -11,6 +11,9 @@ import Input from "../commons/Input";
 import DatePickerInput from "../commons/DatePickerInput";
 import Button from "../commons/Button";
 import { FaPencil } from "react-icons/fa6";
+import FileInput from "../commons/FileInput";
+import { uploadFile } from "../../api/storage/uploadFile";
+import { getPublicUrl } from "../../api/storage/getPublicUrl";
 
 type Props = {
   employee: Employee;
@@ -42,12 +45,14 @@ export default function UpdateEmployee({ employee, opened, close }: Props) {
     setInitialBirthDate()
   );
   const [hireDate, setHireDate] = useState<Date>(new Date(employee.hire_date));
+  const [image, setImage] = useState<File | null>(null);
   const [values, setValues] = useState(initialValues);
 
   const setInitialValues = () => {
     setValues(initialValues);
     setBirthDate(setInitialBirthDate());
     setHireDate(new Date(employee.hire_date));
+    setImage(null);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -81,6 +86,18 @@ export default function UpdateEmployee({ employee, opened, close }: Props) {
 
     if (!isConfirmed) return;
 
+    const requestFilePath = await uploadFile({
+      id: employeeId,
+      bucketName: "employee-files",
+      folder: "images",
+      file: image,
+    });
+
+    const photoUrl = getPublicUrl({
+      bucketName: "employee-files",
+      filePath: requestFilePath,
+    });
+
     const { firstName, lastName, address, email, phone } = values;
 
     await updateEmployee({
@@ -92,15 +109,18 @@ export default function UpdateEmployee({ employee, opened, close }: Props) {
       phone,
       email,
       hireDate,
+      photoUrl,
     });
 
     queryClient.invalidateQueries({ queryKey: [QueryKey.Employees] });
+    queryClient.invalidateQueries({ queryKey: [QueryKey.Employee] });
 
     showCustomNotification("success", {
       title: "Actualizar",
       message: "Empleado actualizado correctamente.",
     });
 
+    setImage(null);
     close();
   };
 
@@ -110,6 +130,16 @@ export default function UpdateEmployee({ employee, opened, close }: Props) {
         <Title>Actualizar empleado</Title>
 
         <Divider my="xs" label="Información personal" labelPosition="center" />
+
+        <FileInput
+          accept="image/png,image/jpeg,image/jpg"
+          label="Fotografía"
+          name="imageUrl"
+          onChange={setImage}
+          placeholder="Subir archivo"
+          required
+          value={image}
+        />
 
         <Input
           label="Nombres"

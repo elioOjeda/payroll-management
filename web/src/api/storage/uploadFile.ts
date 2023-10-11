@@ -3,25 +3,24 @@ import supabase from "../supabase";
 
 type Params = {
   id?: string | null;
-  file?: File;
+  file?: File | null;
+  folder: string;
   bucketName: string;
 };
 
-export const uploadFile = async ({ id, file, bucketName }: Params) => {
-  if (!id || !file) {
-    throw new Error("Missing params");
-  }
+export const uploadFile = async ({ id, file, folder, bucketName }: Params) => {
+  if (!id || !file) return;
 
   const { name, type } = file;
 
-  const filePath = `${id}/${normalizeText(name)}`;
+  const filePath = `${id}/${folder}/${normalizeText(name)}`;
 
   const { data, error } = await supabase.storage
     .from(bucketName.toLowerCase())
     .upload(filePath, file, {
       cacheControl: "3600",
       contentType: type,
-      upsert: false,
+      upsert: true,
     });
 
   if (error) {

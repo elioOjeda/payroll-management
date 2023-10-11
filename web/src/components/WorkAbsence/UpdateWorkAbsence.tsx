@@ -36,7 +36,7 @@ export default function UpdateWorkAbsence({
 
   const setInitialAbsenceDate = useCallback(() => {
     return workAbsence.absence_date
-      ? new Date(workAbsence.absence_date)
+      ? new Date(workAbsence.absence_date.replace(/-/g, "/"))
       : undefined;
   }, [workAbsence.absence_date]);
 

@@ -7,5 +7,7 @@ export enum QueryKey {
   Employee = "Employee",
   Employees = "Employees",
   Overtime = "Overtime",
+  Payroll = "Payroll",
+  Payrolls = "Payrolls",
   WorkAbsences = "WorkAbsences",
 }

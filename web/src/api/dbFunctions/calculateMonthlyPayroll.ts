@@ -6,7 +6,7 @@ import { lastDayOfMonth } from "date-fns";
 type Params = {
   where: {
     companyId?: string;
-    month: Date;
+    payrollDate: Date;
   };
 };
 
@@ -14,7 +14,7 @@ export type CalculateMonthlyPayroll =
   Database["public"]["Functions"]["calculate_monthly_payroll"]["Returns"];
 
 export async function calculateMonthlyPayroll({
-  where: { companyId, month },
+  where: { companyId, payrollDate },
 }: Params): Promise<CalculateMonthlyPayroll | null> {
   if (!companyId) return null;
 
@@ -29,8 +29,8 @@ export async function calculateMonthlyPayroll({
   const promises = employees.map(async (employee) => {
     const { data, error } = await supabase.rpc("calculate_monthly_payroll", {
       p_employee_id: employee.id,
-      p_start_date: formatDateToUTC(month),
-      p_end_date: formatDateToUTC(lastDayOfMonth(month)),
+      p_start_date: formatDateToUTC(payrollDate),
+      p_end_date: formatDateToUTC(lastDayOfMonth(payrollDate)),
     });
 
     if (error) {

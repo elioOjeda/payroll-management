@@ -53,7 +53,10 @@ export const WithPayCell = ({ row }: CellContext<WorkAbsence, unknown>) => {
 
   const isDisabled =
     (!isSuperAdmin && !isAdmin) ||
-    isBefore(new Date(row.original.absence_date), new Date());
+    isBefore(
+      new Date(row.original.absence_date.replace(/-/g, "/")),
+      new Date()
+    );
 
   return (
     <Container>
