@@ -136,7 +136,7 @@ export default function UpdateEmployee({ employee, opened, close }: Props) {
           label="Fotografía"
           name="imageUrl"
           onChange={setImage}
-          placeholder="Subir archivo"
+          placeholder="Subir fotografía"
           required
           value={image}
         />

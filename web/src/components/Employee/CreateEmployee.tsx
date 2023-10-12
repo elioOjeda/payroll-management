@@ -179,7 +179,7 @@ export default function CreateEmployee({ opened, close }: Props) {
           label="Fotografía"
           name="imageUrl"
           onChange={setImage}
-          placeholder="Subir archivo"
+          placeholder="Subir fotografía"
           required
           value={image}
         />

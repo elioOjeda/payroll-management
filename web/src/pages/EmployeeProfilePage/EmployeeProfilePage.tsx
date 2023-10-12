@@ -17,6 +17,7 @@ import Badge from "../../components/commons/Badge";
 import { JobInfo, OvertimeAndAbsences, PersonalInfo } from "./Sections";
 import CreateOvertime from "../../components/Overtime/CreateOvertime";
 import UpdateEmployee from "../../components/Employee/UpdateEmployee";
+import CreateRaise from "../../components/Raise/CreateRaise";
 
 const Container = styled.div`
   display: flex;
@@ -51,6 +52,8 @@ export default function EmployeeProfilePage() {
     { open: openWorkAbsence, close: closeWorkAbsence },
   ] = useDisclosure(false);
   const [openedOvertime, { open: openOvertime, close: closeOvertime }] =
+    useDisclosure(false);
+  const [openedRaise, { open: openRaise, close: closeRaise }] =
     useDisclosure(false);
 
   const { data } = useQuery({
@@ -119,10 +122,12 @@ export default function EmployeeProfilePage() {
         <Button
           color="blue"
           leftIcon={<FaMoneyBillTrendUp />}
-          onClick={() => undefined}
+          onClick={openRaise}
         >
           Agregar aumento
         </Button>
+
+        <CreateRaise opened={openedRaise} close={closeRaise} />
       </ButtonsContainer>
 
       <PersonalInfo employee={data} />

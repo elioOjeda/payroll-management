@@ -2,6 +2,7 @@ import { Card, Divider, Flex, Title } from "@mantine/core";
 import { Employee } from "../../../api/employee";
 import OvertimeTable from "../../../components/Overtime/OvertimeTable";
 import WorkAbsencesTable from "../../../components/WorkAbsence/WorkAbsencesTable";
+import RaiseTable from "../../../components/Raise/RaiseTable";
 
 type Props = {
   employee?: Employee;
@@ -32,6 +33,16 @@ export const OvertimeAndAbsences = ({ employee }: Props) => {
         <Divider />
 
         <WorkAbsencesTable employeeId={employee?.id} />
+      </Flex>
+
+      <Divider mt={32} />
+
+      <Flex direction="column" gap={32} mt={16}>
+        <Title>Aumentos</Title>
+
+        <Divider />
+
+        <RaiseTable employeeId={employee?.id} />
       </Flex>
     </Card>
   );
