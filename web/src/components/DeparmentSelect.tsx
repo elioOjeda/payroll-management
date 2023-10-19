@@ -3,7 +3,7 @@ import { QueryKey } from "../utils/constants";
 import { useQuery } from "@tanstack/react-query";
 import { getSelectData } from "../utils/functions/getSelectData";
 import Select, { SelectProps } from "./commons/Select";
-import { Deparment, getDepartments } from "../api/department";
+import { Department, getDepartments } from "../api/department";
 
 type Props = Omit<SelectProps<string>, "data"> & {
   companyId: string;
@@ -19,7 +19,7 @@ export default function DeparmentSelect({
     queryFn: () => getDepartments({ where: { companyId } }),
   });
 
-  const deparments = getSelectData<Deparment>({
+  const deparments = getSelectData<Department>({
     array: data,
     label: "name",
     value: "id",

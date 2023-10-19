@@ -7,6 +7,7 @@ import {
   FaPeopleGroup,
   FaPersonWalkingLuggage,
   FaUsersGear,
+  FaUsersRectangle,
 } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -60,6 +61,17 @@ export default function Navbar({ opened, setOpened }: Props) {
         }}
       >
         <FaPeopleGroup size={24} /> Empleados
+      </StyledLink>
+
+      <StyledLink
+        to="/departments"
+        onClick={handleClick}
+        style={{
+          fontWeight: 700,
+          marginBottom: 16,
+        }}
+      >
+        <FaUsersRectangle size={24} /> Departamentos
       </StyledLink>
 
       <StyledLink

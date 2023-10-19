@@ -10,6 +10,7 @@ import PayrollDetail from "../pages/PayrollDetail";
 import CompaniesPage from "../pages/CompaniesPage";
 import UsersPage from "../pages/UsersPage";
 import useAppContext from "../hooks/useAppContext";
+import DepartmentsPage from "../pages/DeparmentsPage";
 
 export default function PrivateRouter() {
   const { isSuperAdmin, isAdmin } = useAppContext();
@@ -22,6 +23,8 @@ export default function PrivateRouter() {
         <Route path="employees" element={<EmployeesPage />} />
 
         <Route path="employees/:employeeId" element={<EmployeeProfilePage />} />
+
+        <Route path="departments" element={<DepartmentsPage />} />
 
         <Route path="job-positions" element={<JobPage />} />
 

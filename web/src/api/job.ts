@@ -1,11 +1,11 @@
 import { Database } from "./types";
 import supabase from "./supabase";
 import { Company } from "./company";
-import { Deparment } from "./department";
+import { Department } from "./department";
 
 export type Job = Database["public"]["Tables"]["job"]["Row"] & {
   company: Company;
-  department: Deparment;
+  department: Department;
 };
 
 type GetJobsParams = {

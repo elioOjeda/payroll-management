@@ -58,10 +58,11 @@ export default function UsersTable({ companyId }: Props) {
 
   if (!data) return null;
 
-  const exportData = data.map(({ first_name, last_name, email }) => ({
+  const exportData = data.map(({ first_name, last_name, email, is_admin }) => ({
     Nombres: first_name,
     Apellidos: last_name,
     "Correo electrónico": email,
+    "Es administrador": is_admin,
   }));
 
   return (
