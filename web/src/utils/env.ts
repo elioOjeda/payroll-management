@@ -14,7 +14,7 @@ if (
   throw new Error(`Missing configuration on .env file`);
 
 type Stage = "dev" | "local";
-const stage: Stage = "local";
+const stage: Stage = "dev";
 
 const config = {
   dev: {
