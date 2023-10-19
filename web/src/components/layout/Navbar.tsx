@@ -1,4 +1,5 @@
 import { Navbar as UINavbar } from "@mantine/core";
+import { useColorScheme } from "@mantine/hooks";
 import { Dispatch } from "react";
 import {
   FaMoneyCheckDollar,
@@ -32,19 +33,47 @@ export default function Navbar({ opened, setOpened }: Props) {
       hidden={!opened}
       width={{ sm: 200, lg: 300 }}
     >
-      <StyledLink to="/employees" onClick={handleClick}>
+      <StyledLink
+        to="/employees"
+        onClick={handleClick}
+        style={{
+          fontWeight: 700,
+          marginBottom: 16,
+        }}
+      >
         <FaPeopleGroup size={24} /> Empleados
       </StyledLink>
 
-      <StyledLink to="/job-positions" onClick={handleClick}>
+      <StyledLink
+        to="/job-positions"
+        onClick={handleClick}
+        style={{
+          fontWeight: 700,
+          marginBottom: 16,
+        }}
+      >
         <FaNetworkWired size={24} /> Puestos laborales
       </StyledLink>
 
-      <StyledLink to="/work-absences" onClick={handleClick}>
+      <StyledLink
+        to="/work-absences"
+        onClick={handleClick}
+        style={{
+          fontWeight: 700,
+          marginBottom: 16,
+        }}
+      >
         <FaPersonWalkingLuggage size={24} /> Ausencias laborales
       </StyledLink>
 
-      <StyledLink to="/payrolls" onClick={handleClick}>
+      <StyledLink
+        to="/payrolls"
+        onClick={handleClick}
+        style={{
+          fontWeight: 700,
+          marginBottom: 16,
+        }}
+      >
         <FaMoneyCheckDollar size={24} /> Nóminas
       </StyledLink>
     </UINavbar>

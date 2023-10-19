@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { QueryKey } from "../../utils/constants";
 import { getEmployee } from "../../api/employee";
 import styled from "styled-components";
-import { ActionIcon, Image, Title } from "@mantine/core";
+import { ActionIcon, Flex, Image, Title } from "@mantine/core";
 import Button from "../../components/commons/Button";
 import {
   FaClock,
@@ -29,11 +29,6 @@ const UpdateEmployeeContainer = styled.div`
   align-items: center;
   display: flex;
   gap: 16px;
-`;
-
-const ButtonsContainer = styled.div`
-  display: flex;
-  gap: 8px;
 `;
 
 const BadgeContainer = styled.div`
@@ -99,7 +94,14 @@ export default function EmployeeProfilePage() {
 
       <Title order={5}>{data?.employee_job[0]?.job?.description}</Title>
 
-      <ButtonsContainer>
+      <Flex
+        mih={50}
+        gap="sm"
+        justify="flex-start"
+        align="flex-start"
+        direction="row"
+        wrap="wrap"
+      >
         <Button color="blue" leftIcon={<FaClock />} onClick={openOvertime}>
           Agregar horas extras
         </Button>
@@ -128,7 +130,7 @@ export default function EmployeeProfilePage() {
         </Button>
 
         <CreateRaise opened={openedRaise} close={closeRaise} />
-      </ButtonsContainer>
+      </Flex>
 
       <PersonalInfo employee={data} />
       <JobInfo employee={data} />
