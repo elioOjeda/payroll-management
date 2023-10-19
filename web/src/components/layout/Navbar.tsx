@@ -1,14 +1,16 @@
 import { Navbar as UINavbar } from "@mantine/core";
-import { useColorScheme } from "@mantine/hooks";
 import { Dispatch } from "react";
 import {
+  FaBuilding,
   FaMoneyCheckDollar,
   FaNetworkWired,
   FaPeopleGroup,
   FaPersonWalkingLuggage,
+  FaUsersGear,
 } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import useAppContext from "../../hooks/useAppContext";
 
 type Props = {
   opened: boolean;
@@ -23,9 +25,12 @@ const StyledLink = styled(Link)`
 `;
 
 export default function Navbar({ opened, setOpened }: Props) {
+  const { isSuperAdmin, isAdmin } = useAppContext();
+
   const handleClick = () => {
     setOpened(!opened);
   };
+
   return (
     <UINavbar
       p="md"
@@ -33,6 +38,19 @@ export default function Navbar({ opened, setOpened }: Props) {
       hidden={!opened}
       width={{ sm: 200, lg: 300 }}
     >
+      {isSuperAdmin && (
+        <StyledLink
+          to="/companies"
+          onClick={handleClick}
+          style={{
+            fontWeight: 700,
+            marginBottom: 16,
+          }}
+        >
+          <FaBuilding size={24} /> Empresas
+        </StyledLink>
+      )}
+
       <StyledLink
         to="/employees"
         onClick={handleClick}
@@ -76,6 +94,19 @@ export default function Navbar({ opened, setOpened }: Props) {
       >
         <FaMoneyCheckDollar size={24} /> Nóminas
       </StyledLink>
+
+      {(isAdmin || isSuperAdmin) && (
+        <StyledLink
+          to="/users"
+          onClick={handleClick}
+          style={{
+            fontWeight: 700,
+            marginBottom: 16,
+          }}
+        >
+          <FaUsersGear size={24} /> Usuarios
+        </StyledLink>
+      )}
     </UINavbar>
   );
 }

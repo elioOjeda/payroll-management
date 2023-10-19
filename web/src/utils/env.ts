@@ -3,7 +3,7 @@ const {
   REACT_APP_SUPABASE_DEV_ANON_KEY,
   REACT_APP_SUPABASE_LOCAL_API_URL,
   REACT_APP_SUPABASE_LOCAL_ANON_KEY,
-} = process.env
+} = process.env;
 
 if (
   !REACT_APP_SUPABASE_DEV_API_URL ||
@@ -11,10 +11,10 @@ if (
   !REACT_APP_SUPABASE_LOCAL_API_URL ||
   !REACT_APP_SUPABASE_LOCAL_ANON_KEY
 )
-  throw new Error(`Missing configuration on .env file`)
+  throw new Error(`Missing configuration on .env file`);
 
-type Stage = 'dev' | 'local'
-const stage: Stage = 'dev'
+type Stage = "dev" | "local";
+const stage: Stage = "local";
 
 const config = {
   dev: {
@@ -25,7 +25,7 @@ const config = {
     apiUrl: REACT_APP_SUPABASE_LOCAL_API_URL,
     anonKey: REACT_APP_SUPABASE_LOCAL_ANON_KEY,
   },
-}
+};
 
-export const API_URL = config[stage]?.apiUrl || 'http://localhost:54321'
-export const ANON_KEY = config[stage]?.anonKey || ''
+export const API_URL = config[stage]?.apiUrl || "http://localhost:54321";
+export const ANON_KEY = config[stage]?.anonKey || "";

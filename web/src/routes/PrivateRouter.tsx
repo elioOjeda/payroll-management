@@ -7,11 +7,18 @@ import WorkAbsencesPage from "../pages/WorkAbsencesPage";
 import PayrollsPage from "../pages/PayrollsPage";
 import GeneratePayrollPage from "../pages/GeneratePayrollPage";
 import PayrollDetail from "../pages/PayrollDetail";
+import CompaniesPage from "../pages/CompaniesPage";
+import UsersPage from "../pages/UsersPage";
+import useAppContext from "../hooks/useAppContext";
 
 export default function PrivateRouter() {
+  const { isSuperAdmin, isAdmin } = useAppContext();
+
   return (
     <AppShell>
       <Routes>
+        {isSuperAdmin && <Route path="companies" element={<CompaniesPage />} />}
+
         <Route path="employees" element={<EmployeesPage />} />
 
         <Route path="employees/:employeeId" element={<EmployeeProfilePage />} />
@@ -25,6 +32,10 @@ export default function PrivateRouter() {
         <Route path="payrolls" element={<PayrollsPage />} />
 
         <Route path="payrolls/:payrollId" element={<PayrollDetail />} />
+
+        {(isSuperAdmin || isAdmin) && (
+          <Route path="users" element={<UsersPage />} />
+        )}
 
         <Route path="*" element={<EmployeesPage />} />
       </Routes>
