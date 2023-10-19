@@ -4,11 +4,14 @@ import {
   getCurrentEmployeeJob,
   updateEmployeeJob,
 } from "./employeeJob";
+import { Job } from "./job";
 import supabase from "./supabase";
 import { Database } from "./types";
 
 export type Raise = Database["public"]["Tables"]["raise"]["Row"] & {
-  employee_job: EmployeeJob;
+  employee_job: EmployeeJob & {
+    job: Job;
+  };
 };
 
 type GetRaisesParams = {
@@ -23,7 +26,13 @@ export async function getRaises({ where }: GetRaisesParams): Promise<Raise[]> {
     .select(
       `
       *,
-      employee_job (*)
+      employee_job!inner (
+        *,
+        job (
+          *,
+          department (*)
+        )
+      )
     `,
       { count: "exact" }
     )

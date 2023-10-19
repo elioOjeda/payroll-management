@@ -26,6 +26,14 @@ export default function RaiseTable({ employeeId }: Props) {
   const columns = useMemo(
     () => [
       {
+        accessorKey: "employee_job.job.department.name",
+        header: "Departamento",
+      },
+      {
+        accessorKey: "employee_job.job.title",
+        header: "Puesto laboral",
+      },
+      {
         accessorKey: "raise_amount",
         header: "Cantidad aumentada (GTQ)",
       },

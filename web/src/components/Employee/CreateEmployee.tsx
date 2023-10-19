@@ -47,6 +47,10 @@ export default function CreateEmployee({ opened, close }: Props) {
   const [birthDate, setBirthDate] = useState<Date>();
   const [hireDate, setHireDate] = useState<Date>();
   const [image, setImage] = useState<File | null>(null);
+  const [dpiCopy, setDpiCopy] = useState<File | null>(null);
+  const [titlePhotostatic, setTitlePhotostatic] = useState<File | null>(null);
+  const [criminalRecord, setCriminalRecord] = useState<File | null>(null);
+  const [policeRecord, setPoliceRecord] = useState<File | null>(null);
   const [values, setValues] = useState(initialValues);
 
   const [departmentId, setDepartmentId] = useState<string>();
@@ -62,6 +66,10 @@ export default function CreateEmployee({ opened, close }: Props) {
     setDepartmentId(undefined);
     setJobId(undefined);
     setImage(null);
+    setDpiCopy(null);
+    setTitlePhotostatic(null);
+    setCriminalRecord(null);
+    setPoliceRecord(null);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -90,6 +98,13 @@ export default function CreateEmployee({ opened, close }: Props) {
       return showCustomNotification("warning", {
         title: "Fotografía",
         message: "Sube la fotografía del empleado.",
+      });
+    }
+
+    if (!dpiCopy || !titlePhotostatic || !criminalRecord || !policeRecord) {
+      return showCustomNotification("warning", {
+        title: "Documentos",
+        message: "Sube todos los documentos del empleado.",
       });
     }
 
@@ -125,9 +140,61 @@ export default function CreateEmployee({ opened, close }: Props) {
       filePath: requestFilePath,
     });
 
+    const dpiCopyPath = await uploadFile({
+      id: employeeId,
+      bucketName: "employee-files",
+      folder: "documents",
+      file: dpiCopy,
+    });
+
+    const dpiCopyUrl = getPublicUrl({
+      bucketName: "employee-files",
+      filePath: dpiCopyPath,
+    });
+
+    const titlePhotostaticPath = await uploadFile({
+      id: employeeId,
+      bucketName: "employee-files",
+      folder: "documents",
+      file: titlePhotostatic,
+    });
+
+    const titlePhotostaticUrl = getPublicUrl({
+      bucketName: "employee-files",
+      filePath: titlePhotostaticPath,
+    });
+
+    const criminalRecordPath = await uploadFile({
+      id: employeeId,
+      bucketName: "employee-files",
+      folder: "documents",
+      file: criminalRecord,
+    });
+
+    const criminalRecordUrl = getPublicUrl({
+      bucketName: "employee-files",
+      filePath: criminalRecordPath,
+    });
+
+    const policeRecordPath = await uploadFile({
+      id: employeeId,
+      bucketName: "employee-files",
+      folder: "documents",
+      file: policeRecord,
+    });
+
+    const policeRecordUrl = getPublicUrl({
+      bucketName: "employee-files",
+      filePath: policeRecordPath,
+    });
+
     await updateEmployee({
       employeeId,
       photoUrl,
+      dpiCopyUrl,
+      titlePhotostaticUrl,
+      criminalRecordUrl,
+      policeRecordUrl,
     });
 
     await createEmployeeJob({
@@ -243,6 +310,48 @@ export default function CreateEmployee({ opened, close }: Props) {
           onChange={handleHireDateChange}
           required
           value={hireDate}
+        />
+
+        <Divider my="xs" label="Documentos" labelPosition="center" />
+
+        <FileInput
+          accept=".pdf"
+          label="Copia DPI"
+          name="dpiCopy"
+          onChange={setDpiCopy}
+          placeholder="Subir documento"
+          required
+          value={dpiCopy}
+        />
+
+        <FileInput
+          accept=".pdf"
+          label="Fotostática de título"
+          name="titlePhotostatic"
+          onChange={setTitlePhotostatic}
+          placeholder="Subir documento"
+          required
+          value={titlePhotostatic}
+        />
+
+        <FileInput
+          accept=".pdf"
+          label="Antecedentes penales"
+          name="criminalRecord"
+          onChange={setCriminalRecord}
+          placeholder="Subir documento"
+          required
+          value={criminalRecord}
+        />
+
+        <FileInput
+          accept=".pdf"
+          label="Antecedentes policíacos"
+          name="policeRecord"
+          onChange={setPoliceRecord}
+          placeholder="Subir documento"
+          required
+          value={policeRecord}
         />
 
         {showJobSection() && (

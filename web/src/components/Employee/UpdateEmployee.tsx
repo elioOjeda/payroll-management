@@ -46,6 +46,10 @@ export default function UpdateEmployee({ employee, opened, close }: Props) {
   );
   const [hireDate, setHireDate] = useState<Date>(new Date(employee.hire_date));
   const [image, setImage] = useState<File | null>(null);
+  const [dpiCopy, setDpiCopy] = useState<File | null>(null);
+  const [titlePhotostatic, setTitlePhotostatic] = useState<File | null>(null);
+  const [criminalRecord, setCriminalRecord] = useState<File | null>(null);
+  const [policeRecord, setPoliceRecord] = useState<File | null>(null);
   const [values, setValues] = useState(initialValues);
 
   const setInitialValues = () => {
@@ -53,6 +57,10 @@ export default function UpdateEmployee({ employee, opened, close }: Props) {
     setBirthDate(setInitialBirthDate());
     setHireDate(new Date(employee.hire_date));
     setImage(null);
+    setDpiCopy(null);
+    setTitlePhotostatic(null);
+    setCriminalRecord(null);
+    setPoliceRecord(null);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -98,6 +106,54 @@ export default function UpdateEmployee({ employee, opened, close }: Props) {
       filePath: requestFilePath,
     });
 
+    const dpiCopyPath = await uploadFile({
+      id: employeeId,
+      bucketName: "employee-files",
+      folder: "documents",
+      file: dpiCopy,
+    });
+
+    const dpiCopyUrl = getPublicUrl({
+      bucketName: "employee-files",
+      filePath: dpiCopyPath,
+    });
+
+    const titlePhotostaticPath = await uploadFile({
+      id: employeeId,
+      bucketName: "employee-files",
+      folder: "documents",
+      file: titlePhotostatic,
+    });
+
+    const titlePhotostaticUrl = getPublicUrl({
+      bucketName: "employee-files",
+      filePath: titlePhotostaticPath,
+    });
+
+    const criminalRecordPath = await uploadFile({
+      id: employeeId,
+      bucketName: "employee-files",
+      folder: "documents",
+      file: criminalRecord,
+    });
+
+    const criminalRecordUrl = getPublicUrl({
+      bucketName: "employee-files",
+      filePath: criminalRecordPath,
+    });
+
+    const policeRecordPath = await uploadFile({
+      id: employeeId,
+      bucketName: "employee-files",
+      folder: "documents",
+      file: policeRecord,
+    });
+
+    const policeRecordUrl = getPublicUrl({
+      bucketName: "employee-files",
+      filePath: policeRecordPath,
+    });
+
     const { firstName, lastName, address, email, phone } = values;
 
     await updateEmployee({
@@ -110,6 +166,10 @@ export default function UpdateEmployee({ employee, opened, close }: Props) {
       email,
       hireDate,
       photoUrl,
+      dpiCopyUrl,
+      titlePhotostaticUrl,
+      criminalRecordUrl,
+      policeRecordUrl,
     });
 
     queryClient.invalidateQueries({ queryKey: [QueryKey.Employees] });
@@ -121,6 +181,10 @@ export default function UpdateEmployee({ employee, opened, close }: Props) {
     });
 
     setImage(null);
+    setDpiCopy(null);
+    setTitlePhotostatic(null);
+    setCriminalRecord(null);
+    setPoliceRecord(null);
     close();
   };
 
@@ -206,6 +270,48 @@ export default function UpdateEmployee({ employee, opened, close }: Props) {
           onChange={handleHireDateChange}
           required
           value={hireDate}
+        />
+
+        <Divider my="xs" label="Documentos" labelPosition="center" />
+
+        <FileInput
+          accept=".pdf"
+          label="Copia DPI"
+          name="dpiCopy"
+          onChange={setDpiCopy}
+          placeholder="Subir documento"
+          required
+          value={dpiCopy}
+        />
+
+        <FileInput
+          accept=".pdf"
+          label="Fotostática de título"
+          name="titlePhotostatic"
+          onChange={setTitlePhotostatic}
+          placeholder="Subir documento"
+          required
+          value={titlePhotostatic}
+        />
+
+        <FileInput
+          accept=".pdf"
+          label="Antecedentes penales"
+          name="criminalRecord"
+          onChange={setCriminalRecord}
+          placeholder="Subir documento"
+          required
+          value={criminalRecord}
+        />
+
+        <FileInput
+          accept=".pdf"
+          label="Antecedentes policíacos"
+          name="policeRecord"
+          onChange={setPoliceRecord}
+          placeholder="Subir documento"
+          required
+          value={policeRecord}
         />
 
         <Divider my="xs" />

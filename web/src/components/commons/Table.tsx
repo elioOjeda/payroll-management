@@ -2,7 +2,7 @@ import { Table as MantineTable } from "@mantine/core";
 import { flexRender, Table as ReactTableProps } from "@tanstack/react-table";
 import { HTMLAttributes } from "react";
 import styled from "styled-components";
-import CsvDownloader from "react-csv-downloader";
+import { CSVLink } from "react-csv";
 import Button from "./Button";
 
 const Figure = styled.figure`
@@ -17,32 +17,24 @@ const UITable = styled(MantineTable)`
 
 type Props<T extends object> = HTMLAttributes<HTMLDivElement> & {
   table: ReactTableProps<T>;
-  exportColumns?: any;
   exportData?: any;
   exportFilename?: string;
 };
 
 export default function Table<T extends object>({
   table,
-  exportColumns,
   exportData,
   exportFilename,
 }: Props<T>) {
   const DEFAULT_HEADER_SIZE = 150;
-  const showCSVLink = exportColumns && exportData && exportFilename;
+  const showCSVLink = exportData && exportFilename;
 
   return (
     <Figure style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       {showCSVLink && (
-        <CsvDownloader
-          columns={exportColumns}
-          datas={exportData}
-          extension=".csv"
-          filename={exportFilename}
-          separator="|"
-        >
-          <Button variant="outiline">Exportar a CSV</Button>
-        </CsvDownloader>
+        <CSVLink data={exportData} filename={exportFilename} separator={";"}>
+          <Button variant="outline">Exportar a CSV</Button>
+        </CSVLink>
       )}
 
       <UITable striped>

@@ -1,6 +1,7 @@
 import { Employee } from "../../../api/employee";
 import { Card, Divider, Flex, Grid, Title } from "@mantine/core";
 import { format } from "date-fns";
+import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 
 type Props = {
   employee?: Employee;
@@ -63,6 +64,62 @@ export const JobInfo = ({ employee }: Props) => {
                 : "N/A"}
             </Title>
           </Grid.Col>
+
+          {employee?.dpi_copy && (
+            <Grid.Col span={4}>
+              <Title order={4}>
+                Fotocopia de DPI:{" "}
+                <a href={employee.dpi_copy} rel="noreferrer" target="_blank">
+                  <FaArrowUpRightFromSquare />
+                </a>
+              </Title>
+            </Grid.Col>
+          )}
+
+          {employee?.title_photostatic && (
+            <Grid.Col span={4}>
+              <Title order={4}>
+                Fotostática de título:{" "}
+                <a
+                  href={employee.title_photostatic}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <FaArrowUpRightFromSquare />
+                </a>
+              </Title>
+            </Grid.Col>
+          )}
+
+          {employee?.criminal_record && (
+            <Grid.Col span={4}>
+              <Title order={4}>
+                Antecedentes penales:{" "}
+                <a
+                  href={employee.criminal_record}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <FaArrowUpRightFromSquare />
+                </a>
+              </Title>
+            </Grid.Col>
+          )}
+
+          {employee?.police_record && (
+            <Grid.Col span={4}>
+              <Title order={4}>
+                Antecedentes policíacos:{" "}
+                <a
+                  href={employee.police_record}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <FaArrowUpRightFromSquare />
+                </a>
+              </Title>
+            </Grid.Col>
+          )}
         </Grid>
       </Flex>
     </Card>

@@ -157,6 +157,10 @@ type UpdateParams = {
   email?: string | null;
   hireDate?: Date;
   photoUrl?: string;
+  dpiCopyUrl?: string;
+  titlePhotostaticUrl?: string;
+  criminalRecordUrl?: string;
+  policeRecordUrl?: string;
   isDisabled?: boolean;
 };
 
@@ -170,6 +174,10 @@ export async function updateEmployee({
   email,
   hireDate,
   photoUrl,
+  dpiCopyUrl,
+  titlePhotostaticUrl,
+  criminalRecordUrl,
+  policeRecordUrl,
   isDisabled,
 }: UpdateParams): Promise<Employee> {
   if (!employeeId) {
@@ -187,6 +195,10 @@ export async function updateEmployee({
       email,
       hire_date: hireDate ? formatDateToUTC(hireDate) : hireDate,
       photo_url: photoUrl,
+      dpi_copy: dpiCopyUrl,
+      title_photostatic: titlePhotostaticUrl,
+      criminal_record: criminalRecordUrl,
+      police_record: policeRecordUrl,
       is_disabled: isDisabled,
     })
     .eq("id", employeeId)

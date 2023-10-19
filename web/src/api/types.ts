@@ -312,8 +312,10 @@ export interface Database {
           company_id: string
           created_at: string | null
           created_by: string | null
+          criminal_record: string | null
           disabled_at: string | null
           disabled_by: string | null
+          dpi_copy: string | null
           email: string | null
           first_name: string
           hire_date: string
@@ -322,7 +324,9 @@ export interface Database {
           last_name: string
           phone: string | null
           photo_url: string | null
+          police_record: string | null
           termination_date: string | null
+          title_photostatic: string | null
           updated_at: string | null
           updated_by: string | null
         }
@@ -332,8 +336,10 @@ export interface Database {
           company_id: string
           created_at?: string | null
           created_by?: string | null
+          criminal_record?: string | null
           disabled_at?: string | null
           disabled_by?: string | null
+          dpi_copy?: string | null
           email?: string | null
           first_name: string
           hire_date: string
@@ -342,7 +348,9 @@ export interface Database {
           last_name: string
           phone?: string | null
           photo_url?: string | null
+          police_record?: string | null
           termination_date?: string | null
+          title_photostatic?: string | null
           updated_at?: string | null
           updated_by?: string | null
         }
@@ -352,8 +360,10 @@ export interface Database {
           company_id?: string
           created_at?: string | null
           created_by?: string | null
+          criminal_record?: string | null
           disabled_at?: string | null
           disabled_by?: string | null
+          dpi_copy?: string | null
           email?: string | null
           first_name?: string
           hire_date?: string
@@ -362,7 +372,9 @@ export interface Database {
           last_name?: string
           phone?: string | null
           photo_url?: string | null
+          police_record?: string | null
           termination_date?: string | null
+          title_photostatic?: string | null
           updated_at?: string | null
           updated_by?: string | null
         }

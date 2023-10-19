@@ -5,8 +5,14 @@ import { useTable } from "../../../hooks/useTable";
 import { Employee, getEmployees } from "../../../api/employee";
 import { useQuery } from "@tanstack/react-query";
 import { QueryKey } from "../../../utils/constants";
-import { ActionsCell } from "./Cells/ActionsCell";
-import FirstNameCell from "./Cells/FirstNameCell";
+import {
+  ActionsCell,
+  CriminalRecordCell,
+  DpiCopyCell,
+  FirstNameCell,
+  PoliceRecordCell,
+  TitlePhotostaticCell,
+} from "./Cells";
 
 const Container = styled.div`
   display: flex;
@@ -48,6 +54,26 @@ export default function EmployeesTable({ companyId }: Props) {
         header: "Fecha de contratación",
       },
       {
+        accessorKey: "dpi_copy",
+        header: "Fotocopia de DPI",
+        cell: DpiCopyCell,
+      },
+      {
+        accessorKey: "title_photostatic",
+        header: "Fotostática de título",
+        cell: TitlePhotostaticCell,
+      },
+      {
+        accessorKey: "criminal_record",
+        header: "Antecedentes penales",
+        cell: CriminalRecordCell,
+      },
+      {
+        accessorKey: "police_record",
+        header: "Antecedentes policíacos",
+        cell: PoliceRecordCell,
+      },
+      {
         header: "Acciones",
         cell: ActionsCell,
       },
@@ -63,29 +89,6 @@ export default function EmployeesTable({ companyId }: Props) {
 
   if (!data) return null;
 
-  const exportColumns = [
-    {
-      id: "first_name",
-      displayName: "Nombres",
-    },
-    {
-      id: "last_name",
-      displayName: "Apellidos",
-    },
-    {
-      id: "address",
-      displayName: "Dirección",
-    },
-    {
-      id: "phone",
-      displayName: "Teléfono",
-    },
-    {
-      id: "hire_date",
-      displayName: "Fecha de contratación",
-    },
-  ];
-
   const exportData = data.map(
     ({ first_name, last_name, address, phone, hire_date }) => ({
       first_name,
@@ -98,12 +101,7 @@ export default function EmployeesTable({ companyId }: Props) {
 
   return (
     <Container>
-      <Table
-        table={table}
-        exportColumns={exportColumns}
-        exportData={exportData}
-        exportFilename="empleados"
-      />
+      <Table table={table} exportData={exportData} exportFilename="empleados" />
     </Container>
   );
 }
