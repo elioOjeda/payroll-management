@@ -91,11 +91,11 @@ export default function EmployeesTable({ companyId }: Props) {
 
   const exportData = data.map(
     ({ first_name, last_name, address, phone, hire_date }) => ({
-      first_name,
-      last_name,
-      address,
-      phone,
-      hire_date,
+      Nombres: first_name,
+      Apellidos: last_name,
+      Dirección: address,
+      Teléfono: phone,
+      "Fecha de contratación": hire_date,
     })
   );
 

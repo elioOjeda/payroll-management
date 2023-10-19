@@ -67,9 +67,31 @@ export default function WorkAbsencesTable({ companyId, employeeId }: Props) {
     manualPagination: true,
   });
 
+  if (!data) return null;
+
+  const exportData = data.map(
+    ({
+      employee: { first_name },
+      type,
+      absence_date,
+      is_approved,
+      is_with_pay,
+    }) => ({
+      Empleado: first_name,
+      "Tipo de ausencia": type,
+      "Fecha de ausencia": absence_date,
+      Aprobada: is_approved,
+      "Goce de sueldo": is_with_pay,
+    })
+  );
+
   return (
     <Container>
-      <Table table={table} />
+      <Table
+        table={table}
+        exportData={exportData}
+        exportFilename="ausencias-laborales"
+      />
     </Container>
   );
 }

@@ -78,6 +78,34 @@ export default function PayrollDetailTable({ data }: Props) {
     []
   );
 
+  const exportData = data.map(
+    ({
+      full_name,
+      base_salary,
+      days_worked,
+      absences,
+      absences_discount,
+      simple_overtime_count,
+      simple_overtime_total,
+      double_overtime_count,
+      double_overtime_total,
+      igss_discount,
+      total_liquid,
+    }) => ({
+      "Nombre completo": full_name,
+      "Salario base": base_salary,
+      "Días trabajados": days_worked,
+      "Ausencias sin goce de sueldo": absences,
+      "Descuento por ausencias (GTQ)": absences_discount,
+      "Horas extras simples (HES)": simple_overtime_count,
+      "Total HES (GTQ)": simple_overtime_total,
+      "Horas extras dobles (HED)": double_overtime_count,
+      "Total HED (GTQ)": double_overtime_total,
+      "Descuento de IGSS": igss_discount,
+      "Total líquido (GTQ)": total_liquid,
+    })
+  );
+
   const table = useTable<PayrollData>({
     columns,
     data: data ?? [],
@@ -86,7 +114,11 @@ export default function PayrollDetailTable({ data }: Props) {
 
   return (
     <Container>
-      <Table table={table} />
+      <Table
+        table={table}
+        exportData={exportData}
+        exportFilename="nomina-sueldos"
+      />
     </Container>
   );
 }

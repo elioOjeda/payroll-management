@@ -52,9 +52,23 @@ export default function JobsTable({ companyId, departmentId }: Props) {
     manualPagination: true,
   });
 
+  if (!data) return null;
+
+  const exportData = data.map(
+    ({ department: { name }, title, description }) => ({
+      Departamento: name,
+      Puesto: title,
+      Descripción: description,
+    })
+  );
+
   return (
     <Container>
-      <Table table={table} />
+      <Table
+        table={table}
+        exportData={exportData}
+        exportFilename="puestos-laborales"
+      />
     </Container>
   );
 }

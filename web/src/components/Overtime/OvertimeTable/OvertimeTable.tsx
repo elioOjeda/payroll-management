@@ -48,9 +48,21 @@ export default function OvertimeTable({ employeeId }: Props) {
     manualPagination: true,
   });
 
+  if (!data) return null;
+
+  const exportData = data.map(({ type, date, quantity }) => ({
+    "Tipo de hora extra": type,
+    Fecha: date,
+    Cantidad: quantity,
+  }));
+
   return (
     <Container>
-      <Table table={table} />
+      <Table
+        table={table}
+        exportData={exportData}
+        exportFilename="tiempo-extra"
+      />
     </Container>
   );
 }

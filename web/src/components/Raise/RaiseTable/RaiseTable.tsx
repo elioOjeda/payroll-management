@@ -38,7 +38,7 @@ export default function RaiseTable({ employeeId }: Props) {
         header: "Cantidad aumentada (GTQ)",
       },
       {
-        accessorKey: "date",
+        accessorKey: "raise_date",
         header: "Fecha",
         cell: RaiseDateCell,
       },
@@ -56,9 +56,31 @@ export default function RaiseTable({ employeeId }: Props) {
     manualPagination: true,
   });
 
+  if (!data) return null;
+
+  const exportData = data.map(
+    ({
+      employee_job: {
+        job: {
+          title,
+          department: { name },
+        },
+      },
+      raise_amount,
+      raise_date,
+      description,
+    }) => ({
+      Departamento: name,
+      "Puesto laboral": title,
+      "Cantidad aumentada (GTQ)": raise_amount,
+      Fecha: raise_date,
+      Descripción: description,
+    })
+  );
+
   return (
     <Container>
-      <Table table={table} />
+      <Table table={table} exportData={exportData} exportFilename="aumentos" />
     </Container>
   );
 }
