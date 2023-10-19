@@ -15,7 +15,17 @@ const supabase = createClient(supabaseUrl, serviceRoleKey, {
   },
 });
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+};
+
 serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+
   try {
     const { email, password, company_id, is_admin, is_super_admin } =
       await req.json();
@@ -44,12 +54,12 @@ serve(async (req) => {
     if (error) throw error;
 
     return new Response(JSON.stringify(user), {
-      headers: { "Content-Type": "application/json" },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
     console.log("Error", error.message);
     return new Response(JSON.stringify({ error: error.message }), {
-      headers: { "Content-Type": "application/json" },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });

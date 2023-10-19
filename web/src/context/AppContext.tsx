@@ -1,6 +1,6 @@
 import { Session, User } from "@supabase/supabase-js";
 import supabase from "../api/supabase";
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { Dispatch, ReactNode, createContext, useEffect, useState } from "react";
 
 type AppContextState = {
   hasSession: boolean;
@@ -8,6 +8,7 @@ type AppContextState = {
   user?: User | null;
   isSuperAdmin?: boolean;
   isAdmin?: boolean;
+  setIsAdmin?: Dispatch<React.SetStateAction<boolean | undefined>>;
 };
 
 export const AppContext = createContext<AppContextState>({
@@ -50,6 +51,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         user,
         isSuperAdmin,
         isAdmin,
+        setIsAdmin,
       }}
     >
       {children}

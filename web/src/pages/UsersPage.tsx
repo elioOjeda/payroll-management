@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import EmployeesTable from "../components/Employee/EmployeeTable";
 import Button from "../components/commons/Button";
 import { FaCirclePlus } from "react-icons/fa6";
 import { useDisclosure } from "@mantine/hooks";
 import { Title } from "@mantine/core";
-import CreateEmployee from "../components/Employee/CreateEmployee";
+import CreateUser from "../components/User/CreateUser";
+import UsersTable from "../components/User/UserTable.tsx/UsersTable";
 
 const Container = styled.div`
   display: flex;
@@ -26,14 +26,14 @@ export default function UsersPage() {
       <InnerContainer>
         <Title>Usuarios</Title>
 
-        <CreateEmployee opened={opened} close={close} />
+        <CreateUser opened={opened} close={close} />
 
         <Button color="blue" leftIcon={<FaCirclePlus />} onClick={open}>
           Crear
         </Button>
       </InnerContainer>
 
-      <EmployeesTable />
+      <UsersTable />
     </Container>
   );
 }
