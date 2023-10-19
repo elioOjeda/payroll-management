@@ -1,4 +1,5 @@
 import { Navbar as UINavbar } from "@mantine/core";
+import { Dispatch } from "react";
 import {
   FaMoneyCheckDollar,
   FaNetworkWired,
@@ -10,6 +11,7 @@ import styled from "styled-components";
 
 type Props = {
   opened: boolean;
+  setOpened: Dispatch<React.SetStateAction<boolean>>;
 };
 
 const StyledLink = styled(Link)`
@@ -19,7 +21,10 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
-export default function Navbar({ opened }: Props) {
+export default function Navbar({ opened, setOpened }: Props) {
+  const handleClick = () => {
+    setOpened(!opened);
+  };
   return (
     <UINavbar
       p="md"
@@ -27,19 +32,19 @@ export default function Navbar({ opened }: Props) {
       hidden={!opened}
       width={{ sm: 200, lg: 300 }}
     >
-      <StyledLink to="/employees">
+      <StyledLink to="/employees" onClick={handleClick}>
         <FaPeopleGroup size={24} /> Empleados
       </StyledLink>
 
-      <StyledLink to="/job-positions">
+      <StyledLink to="/job-positions" onClick={handleClick}>
         <FaNetworkWired size={24} /> Puestos laborales
       </StyledLink>
 
-      <StyledLink to="/work-absences">
+      <StyledLink to="/work-absences" onClick={handleClick}>
         <FaPersonWalkingLuggage size={24} /> Ausencias laborales
       </StyledLink>
 
-      <StyledLink to="/payrolls">
+      <StyledLink to="/payrolls" onClick={handleClick}>
         <FaMoneyCheckDollar size={24} /> Nóminas
       </StyledLink>
     </UINavbar>

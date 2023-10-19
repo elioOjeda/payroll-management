@@ -24,7 +24,7 @@ export default function AppShelll({ children }: Props) {
       }}
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
-      navbar={<Navbar opened={opened} />}
+      navbar={<Navbar opened={opened} setOpened={setOpened} />}
       footer={<Footer />}
       header={<Header opened={opened} setOpened={setOpened} />}
     >
