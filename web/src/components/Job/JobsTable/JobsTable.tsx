@@ -40,7 +40,7 @@ export default function JobsTable({ companyId, departmentId }: Props) {
       },
       {
         accessorKey: "base_salary",
-        header: "Salario base",
+        header: "Salario base (GTQ)",
         cell: BaseSalaryCell,
       },
       {

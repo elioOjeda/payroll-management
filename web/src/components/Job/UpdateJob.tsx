@@ -112,6 +112,7 @@ export default function UpdateJob({ job, opened, close }: Props) {
           name="baseSalary"
           onChange={handleChange}
           placeholder="Salario base"
+          required
           value={values.baseSalary ?? ""}
           type="number"
         />
