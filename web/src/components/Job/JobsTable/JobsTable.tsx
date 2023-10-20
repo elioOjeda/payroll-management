@@ -5,7 +5,7 @@ import { useTable } from "../../../hooks/useTable";
 import { useQuery } from "@tanstack/react-query";
 import { QueryKey } from "../../../utils/constants";
 import { Job, getJobs } from "../../../api/job";
-import { ActionsCell } from "./Cells";
+import { ActionsCell, BaseSalaryCell } from "./Cells";
 
 const Container = styled.div`
   display: flex;
@@ -37,6 +37,11 @@ export default function JobsTable({ companyId, departmentId }: Props) {
       {
         accessorKey: "description",
         header: "Descripción",
+      },
+      {
+        accessorKey: "base_salary",
+        header: "Salario base",
+        cell: BaseSalaryCell,
       },
       {
         header: "Acciones",

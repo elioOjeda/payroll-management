@@ -51,6 +51,7 @@ type CreateParams = {
   departmentId: string;
   title: string;
   description?: string;
+  baseSalary: number;
 };
 
 export async function createJob({
@@ -58,6 +59,7 @@ export async function createJob({
   departmentId,
   title,
   description,
+  baseSalary,
 }: CreateParams): Promise<Job> {
   const { data, error } = await supabase
     .from("job")
@@ -66,6 +68,7 @@ export async function createJob({
       department_id: departmentId,
       title,
       description,
+      base_salary: baseSalary,
     })
     .select(
       `
@@ -88,6 +91,7 @@ type UpdateParams = {
   departmentId?: string;
   title?: string;
   description?: string | null;
+  baseSalary?: number | null;
   isDisabled?: boolean;
 };
 
@@ -96,6 +100,7 @@ export async function updateJob({
   departmentId,
   title,
   description,
+  baseSalary,
   isDisabled,
 }: UpdateParams): Promise<Job> {
   if (!jobId) {
@@ -108,6 +113,7 @@ export async function updateJob({
       department_id: departmentId,
       title,
       description,
+      base_salary: baseSalary,
       is_disabled: isDisabled,
     })
     .eq("id", jobId)

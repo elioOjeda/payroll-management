@@ -29,6 +29,7 @@ export default function UpdateJob({ job, opened, close }: Props) {
   const initialValues = {
     title: job.title,
     description: job.description,
+    baseSalary: job.base_salary,
   };
 
   const [departmentId, setDepartmentId] = useState<string>(job.department_id);
@@ -62,13 +63,14 @@ export default function UpdateJob({ job, opened, close }: Props) {
 
     if (!isConfirmed) return;
 
-    const { title, description } = values;
+    const { title, description, baseSalary } = values;
 
     await updateJob({
       jobId,
       departmentId,
       title,
       description,
+      baseSalary,
     });
 
     queryClient.invalidateQueries({ queryKey: [QueryKey.Jobs] });
@@ -103,6 +105,15 @@ export default function UpdateJob({ job, opened, close }: Props) {
           onChange={handleChange}
           placeholder="Descripción"
           value={values.description ?? ""}
+        />
+
+        <Input
+          label="Salario base"
+          name="baseSalary"
+          onChange={handleChange}
+          placeholder="Salario base"
+          value={values.baseSalary ?? ""}
+          type="number"
         />
 
         <DeparmentSelect

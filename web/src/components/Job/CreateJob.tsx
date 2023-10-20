@@ -26,9 +26,14 @@ const StyledForm = styled.form`
   padding: 16px;
 `;
 
-const initialValues = {
+const initialValues: {
+  title: string;
+  description: string;
+  baseSalary: number | null;
+} = {
   title: "",
   description: "",
+  baseSalary: null,
 };
 
 export default function CreateJob({ opened, close }: Props) {
@@ -60,6 +65,13 @@ export default function CreateJob({ opened, close }: Props) {
 
     if (!departmentId) return;
 
+    if (!values.baseSalary) {
+      return showCustomNotification("warning", {
+        title: "Salario base no válido",
+        message: "Ingrese un salario base válido.",
+      });
+    }
+
     const isConfirmed = await confirmationModal({
       title: "Crear",
       message: "¿Estás seguro de que deseas crear este puesto laboral?",
@@ -67,13 +79,14 @@ export default function CreateJob({ opened, close }: Props) {
 
     if (!isConfirmed) return;
 
-    const { title, description } = values;
+    const { title, description, baseSalary } = values;
 
     await createJob({
       companyId: isSuperAdmin ? companyId : currentCompanyId,
       departmentId,
       title,
       description,
+      baseSalary,
     });
 
     queryClient.invalidateQueries({ queryKey: [QueryKey.Jobs] });
@@ -124,6 +137,16 @@ export default function CreateJob({ opened, close }: Props) {
           onChange={handleChange}
           placeholder="Descripción"
           value={values.description}
+        />
+
+        <Input
+          label="Salario base"
+          name="baseSalary"
+          onChange={handleChange}
+          placeholder="Salario base"
+          required
+          value={values.baseSalary ?? ""}
+          type="number"
         />
 
         {showDeparmentSelect() && (
