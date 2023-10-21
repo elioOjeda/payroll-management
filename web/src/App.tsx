@@ -26,7 +26,7 @@ function App() {
       withNormalizeCSS
     >
       <ModalsProvider
-        labels={{ cancel: "Cancelar", confirm: "Confirmar" }}
+        labels={{ cancel: "Cancelarr", confirm: "Confirmar" }}
         modalProps={{ styles: { title: { fontWeight: "bold" } } }}
       >
         <Notifications position="top-right" />
